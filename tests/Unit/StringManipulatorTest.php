@@ -12,6 +12,10 @@ class StringManipulatorTest extends TestCase {
      */
     public function testStringManipulator($operation, $str1, $str2, $expected) {
         $stringManipulator = new StringManipulator();
+        if(!is_string($str1) || !is_string($str2)) {
+            $this->expectException(InvalidArgumentException::class);
+            $this->expectExceptionMessage('Invalid argument');
+        }
         if($operation == 'concatenate') {
             $result = $stringManipulator->concatenate($str1, $str2);
         } elseif($operation == 'capitalize') {

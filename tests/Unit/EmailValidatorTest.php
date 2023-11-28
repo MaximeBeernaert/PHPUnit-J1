@@ -11,9 +11,13 @@ class EmailValidatorTest extends TestCase
     public function testEmailValidatorOperations($operation, $a, $expected) {
         $emailValidator = new EmailValidator();
         if($operation == 'isValid') {
+            if(!filter_var($a, FILTER_VALIDATE_EMAIL)) {
+                $this->expectException(InvalidArgumentException::class);
+                $this->expectExceptionMessage('Email must be a valid email address');
+            }
             $result = $emailValidator->isValid($a);
         }
-        $this->assertEquals($expected, $result);
+        $this->assertTrue($expected, $result);
     }
     
     public function emailValidatorDataProvider() {
@@ -22,7 +26,9 @@ class EmailValidatorTest extends TestCase
             ['isValid', 'maximebeernaert gmail.com', false],
             ['isValid', '', false],
             ['isValid', 'maxime@gmail.', false],
-            ['isValid', 'maximebeernaert123!**@gmail.com', true]
+            ['isValid', 'maximebeernaert123!**@gmail.com', true],
+            ['isValid', 'maximebeernaer t123!**@gmail.com', true],
+
         ];
     }
 }

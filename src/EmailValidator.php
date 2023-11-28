@@ -10,7 +10,7 @@ class EmailValidator
         if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return true;
         }else {
-            return false;
+            throw new InvalidArgumentException('Email must be a valid email address');
         }
     }
 }

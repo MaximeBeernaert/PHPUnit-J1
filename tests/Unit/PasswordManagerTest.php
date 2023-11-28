@@ -25,7 +25,20 @@ class PasswordManagerTest extends TestCase
             }else if(strlen($a) < 8) {
                 $this->expectException(InvalidArgumentException::class);
                 $this->expectExceptionMessage('Password must be at least 8 characters long');
+            }else if (strlen($a) > 20) {
+                $this->expectException(InvalidArgumentException::class);
+                $this->expectExceptionMessage('Password must be at most 20 characters long');
+            }else if (preg_match('/\s/', $a)) {
+                $this->expectException(InvalidArgumentException::class);
+                $this->expectExceptionMessage('Password must not contain any whitespace');
+            }else if (preg_match('/[^A-Za-z0-9]/', $a)) {
+                $this->expectException(InvalidArgumentException::class);
+                $this->expectExceptionMessage('Password must not contain any special characters');
+            }else if (preg_match('/(.)\1{2,}/', $a)) { 
+                $this->expectException(InvalidArgumentException::class);
+                $this->expectExceptionMessage('Password must not contain any sequence of 3 identical characters');
             }
+
 
             $result = $passwordManager->isValid($a);
         }
@@ -41,7 +54,11 @@ class PasswordManagerTest extends TestCase
             ['isValid', 'MAXIME123!', false],
             ['isValid', 'maxime', false],
             ['isValid', 'MAXIME', false],
-            ['isValid', 'mrt123!', false]
+            ['isValid', 'mrt123!', false],
+            ['isValid', 'mrt 123!', false],
+            ['isValid', 'mrt12333333!', false],
+            ['isValid', 'mrt1--23!', false],
+
         ];
     }
 }

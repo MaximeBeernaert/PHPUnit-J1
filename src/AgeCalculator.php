@@ -1,5 +1,4 @@
 <?php
-
 class AgeCalculator
 {
     public function calculateAge($birthDate)
@@ -8,8 +7,10 @@ class AgeCalculator
 
         if (!is_string($birthDate)) {
             throw new InvalidArgumentException('Birthdate must be a valid date');
+
         }else if (!is_numeric(strtotime($birthDate))) {
             throw new InvalidArgumentException('Birthdate must be a valid date');
+            
         }else if( checkdate(date('m', strtotime($birthDate)), date('d', strtotime($birthDate)), date('Y', strtotime($birthDate))) ) { 
             $birthDate = new DateTime($birthDate);
         }
@@ -24,6 +25,4 @@ class AgeCalculator
         return $interval->format('%y');
     }
 }
-
-
 ?>
